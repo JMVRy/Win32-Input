@@ -410,8 +410,26 @@ public static class InputOperations
         return SendInput( ( uint )inputs.Length, inputs, INPUT.Size );
     }
 
+    /// <summary>
+    /// Sends a string of Unicode characters as input
+    /// </summary>
+    /// <param name="s">The string you wish to type</param>
+    /// <param name="millisecondDelay">The delay between key press and release</param>
+    /// <returns>The number of successful inputs</returns>
     public static uint SendUnicode( string s, uint millisecondDelay = 0 ) => SendUnicode( s.ToCharArray(), millisecondDelay );
+    /// <summary>
+    /// Sends a single Unicode character as input
+    /// </summary>
+    /// <param name="c">The character you wish to type</param>
+    /// <param name="millisecondDelay">The delay between key press and release</param>
+    /// <returns>The number of successful inputs</returns>
     public static uint SendUnicode( char c, uint millisecondDelay = 0 ) => SendUnicode( new[] { c }, millisecondDelay );
+    /// <summary>
+    /// Sends multiple Unicode characters as input
+    /// </summary>
+    /// <param name="chars">The array of characters you wish to type</param>
+    /// <param name="millisecondDelay">The delay between key press and release</param>
+    /// <returns>The number of successful inputs</returns>
     public static uint SendUnicode( char[] chars, uint millisecondDelay = 0 )
     {
         INPUT[] inputs = new INPUT[ chars.Length ];
