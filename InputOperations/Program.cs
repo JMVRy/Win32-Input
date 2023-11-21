@@ -323,6 +323,7 @@ public static class InputOperations
     /// <returns>A pointer containing the extra information, which is device specific</returns>
     [DllImport( "user32.dll", SetLastError = true )]
     private static extern IntPtr GetMessageExtraInfo();
+    public static IntPtr GetExtraInfo() => GetMessageExtraInfo();
 
     /// <summary>
     /// Gets data from the clipboard
@@ -620,7 +621,7 @@ public static class InputOperations
         /// Time stamp for the event<br />
         /// If 0, the system provides the time
         /// </summary>
-        public int time;
+        public uint time;
         /// <summary>
         /// Additional info, required to use <see cref="GetMessageExtraInfo"/> for it
         /// </summary>
@@ -1469,7 +1470,7 @@ public static class InputOperations
         /// </summary>
         public uint time;
         /// <summary>
-        /// Additional info, required to use <see cref="GetMessageExtraInfo"/> for it
+        /// Additional info, required to use <see cref="GetExtraInfo"/> for it
         /// </summary>
         public UIntPtr dwExtraInfo;
     }
