@@ -419,7 +419,7 @@ public static class InputOperations
         {
             inputs[ i ].type = InputType.INPUT_KEYBOARD;
             inputs[ i ].U.ki.wVk = 0;
-            inputs[ i ].U.ki.wScan = ( ScanCodeShort )chars[ i ];
+            inputs[ i ].U.ki.wScan = ( ScanCode )chars[ i ];
             inputs[ i ].U.ki.dwFlags = KEYEVENTF.UNICODE;
             inputs[ i ].U.ki.time = 0;
         }
@@ -605,7 +605,7 @@ public static class InputOperations
         /// <summary>
         /// An enum of shorts of the different scancodes for certain keys
         /// </summary>
-        internal ScanCodeShort wScan;
+        internal ScanCode wScan;
         /// <summary>
         /// Types of keys to input, being:
         /// <list type="bullet">
@@ -642,7 +642,7 @@ public static class InputOperations
     /// <summary>
     /// An enum of shorts containing all scancodes used for <see cref="KEYBDINPUT.wScan"/>
     /// </summary>
-    public enum ScanCodeShort : short
+    public enum ScanCode : short
     {
         VK_LBUTTON = 0,
         VK_RBUTTON = 0,
