@@ -318,10 +318,10 @@ public static class InputOperations
     private static extern uint SendInput( uint cInputs, INPUT[] pInputs, int cbSize );
 
     /// <summary>
-    /// Gets the last error through Win32
+    /// Gets the last error produced when PInvoke-ing Win32
     /// </summary>
     /// <returns>An integer representation of various error values. </returns>
-    public static int GetLastError() => Marshal.GetLastWin32Error();
+    public static int GetLastError() => Marshal.GetLastPInvokeError(); // On .NET 6 or later, GetLastPInvokeError is equivalent to GetLastWin32Error
 
     /// <summary>
     /// Gets extra info about the input, kinda required by SendInput
