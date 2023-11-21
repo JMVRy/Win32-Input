@@ -1437,7 +1437,7 @@ public static class InputOperations
         /// <see cref="dwFlags"/> specific data, such as:
         /// <list type="bullet">
         /// <item>Amount of wheel movement if <see cref="MOUSEEVENTF.WHEEL"/> is specified, one mouse click == 120</item>
-        /// <item>Amount of wheel movement if using Windows Vista and <see cref="MOUSEEVENTF.HWHEEL"/> is specified, one mouse click == 120</item>
+        /// <item>Amount of wheel movement if using Windows Vista or newer and <see cref="MOUSEEVENTF.HWHEEL"/> is specified, one mouse click == 120</item>
         /// <item>Which X button should be pressed (being 1 for XBUTTON1, 2 for XBUTTON2) if <see cref="MOUSEEVENTF.XDOWN"/> or <see cref="MOUSEEVENTF.XUP"/> is specified</item>
         /// </list>
         /// Should be 0 if none of the above are used
@@ -1457,7 +1457,7 @@ public static class InputOperations
         /// <item><see cref="MOUSEEVENTF.XUP"/> for releasing an X button</item>
         /// <item><see cref="MOUSEEVENTF.WHEEL"/> for scrolling</item>
         /// <item><see cref="MOUSEEVENTF.HWHEEL"/> for scrolling in Vista</item>
-        /// <item><see cref="MOUSEEVENTF.MOVE_NOCOALESCE"/> for mouse movement without coalescing messages</item>
+        /// <item><see cref="MOUSEEVENTF.MOVE_NOCOALESCE"/> for mouse movement without coalescing messages, for Windows Vista or newer</item>
         /// <item><see cref="MOUSEEVENTF.VIRTUALDESK"/> for mapping coordinates to the entire desktop, must be used with <see cref="MOUSEEVENTF.ABSOLUTE"/></item>
         /// <item><see cref="MOUSEEVENTF.ABSOLUTE"/> for normalizing <see cref="dx"/> and <see cref="dy"/> to contain absolute coordinates, where it'd normally be relative coordinates without this set</item>
         /// </list>
