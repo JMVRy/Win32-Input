@@ -318,6 +318,12 @@ public static class InputOperations
     private static extern uint SendInput( uint cInputs, INPUT[] pInputs, int cbSize );
 
     /// <summary>
+    /// Gets the last error through Win32
+    /// </summary>
+    /// <returns>An integer representation of various error values. </returns>
+    public static int GetLastError() => Marshal.GetLastWin32Error();
+
+    /// <summary>
     /// Gets extra info about the input, kinda required by SendInput
     /// </summary>
     /// <returns>A pointer containing the extra information, which is device specific</returns>
@@ -334,7 +340,7 @@ public static class InputOperations
     /// </summary>
     /// <param name="uFormat">The clipboard format, see <see cref="ClipboardFormat"/> for standard formats</param>
     /// <returns>A pointer to the data, use <see cref="Marshal.PtrToStringUni(nint)"/> when converting to <see cref="string"/></returns>
-    [DllImport( "user32.dll" )]
+    [DllImport( "user32.dll", SetLastError = true )]
     private static extern IntPtr GetClipboardData( uint uFormat );
 
     /// <summary>
@@ -342,14 +348,14 @@ public static class InputOperations
     /// </summary>
     /// <param name="hWndNewOwner">A handle to the window to be associated with the open clipboard, use 0 to associate with the current task</param>
     /// <returns>A boolean for success or failure</returns>
-    [DllImport( "user32.dll" )]
+    [DllImport( "user32.dll", SetLastError = true )]
     private static extern bool OpenClipboard( IntPtr hWndNewOwner );
 
     /// <summary>
     /// Closes the clipboard, reallowing modification by other clients
     /// </summary>
     /// <returns>A boolean for success or failure</returns>
-    [DllImport( "user32.dll" )]
+    [DllImport( "user32.dll", SetLastError = true )]
     private static extern bool CloseClipboard();
 
     /// <summary>
@@ -357,7 +363,7 @@ public static class InputOperations
     /// </summary>
     /// <param name="hMem">A handle to the global memory object, obtained using GlobalAlloc or GlobalReAlloc</param>
     /// <returns>A pointer to the first byte of the memory block, or a pointer to 0 for failure</returns>
-    [DllImport( "kernel32.dll" )]
+    [DllImport( "kernel32.dll", SetLastError = true )]
     private static extern IntPtr GlobalLock( IntPtr hMem );
 
     /// <summary>
@@ -365,7 +371,7 @@ public static class InputOperations
     /// </summary>
     /// <param name="hMem">A handle to the global memory object</param>
     /// <returns>A boolean for whether the global memory object is still locked or not</returns>
-    [DllImport( "kernel32.dll" )]
+    [DllImport( "kernel32.dll", SetLastError = true )]
     private static extern bool GlobalUnlock( IntPtr hMem );
 
     /// <summary>
