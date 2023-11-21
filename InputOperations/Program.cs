@@ -1,11 +1,13 @@
 ﻿using System.Runtime.InteropServices;
 
+namespace JMVR;
+
 #region Input Operation Classes
 /// <summary>
 /// Various mouse operations for Windows using P/Invoke<br />
 /// Although not all methods are mouse specific, they are adjacently related, so I just decided to put them in here
 /// </summary>
-public class MouseOperations
+public static class MouseOperations
 {
     /// <summary>
     /// Flags for which mouse events to do
@@ -303,10 +305,10 @@ public class MouseOperations
 /// <summary>
 /// A class for handling various Input operations, currently without any semi-related methods
 /// </summary>
-public class InputOperations
+public static class InputOperations
 {
     /// <summary>
-    /// Sends general input supplied
+    /// Sends the supplied general input
     /// </summary>
     /// <param name="cInputs">The number of inputs being sent</param>
     /// <param name="pInputs">An array of inputs to be sent</param>
@@ -395,7 +397,7 @@ public class InputOperations
     /// <returns>The number of inputs successfully sent, refer to <seealso cref="SendInput(uint, INPUT[], int)"/> for extra details about this number</returns>
     public static uint InputEvent( INPUT[] inputs )
     {
-        // Extra processing can be done here, but as of this project none is needed
+        // Extra processing can be done here, but none is needed as of yet
 
         // Loops through each input to make sure all extra info is included
         for ( int i = 0; i < inputs.Length; i++ )
@@ -407,6 +409,7 @@ public class InputOperations
         return SendInput( ( uint )inputs.Length, inputs, INPUT.Size );
     }
 
+    public static uint SendUnicode( string s, uint millisecondDelay = 0 ) => SendUnicode( s.ToCharArray(), millisecondDelay );
     public static uint SendUnicode( char c, uint millisecondDelay = 0 ) => SendUnicode( new[] { c }, millisecondDelay );
     public static uint SendUnicode( char[] chars, uint millisecondDelay = 0 )
     {
@@ -443,7 +446,7 @@ public class InputOperations
     /// <param name="vk">The virtual key to send</param>
     /// <param name="millisecondDelay">The delay between press and release</param>
     /// <returns>The number of inputs successfully sent, refer to <seealso cref="SendInput(uint, INPUT[], int)"/> for extra details about this number</returns>
-    public static uint SendKeypress( VirtualKeyShort vk, uint millisecondDelay = 0 ) => SendKeypress( new VirtualKeyShort[] { vk }, millisecondDelay );
+    public static uint SendKeypress( VirtualKey vk, uint millisecondDelay = 0 ) => SendKeypress( new VirtualKey[] { vk }, millisecondDelay );
     /// <summary>
     /// Sends the keys with some delay between press and release.<br />
     /// NOTE: Sends each key supplied instantly, the delay is only for delay between press and release!!!<br />
@@ -452,7 +455,7 @@ public class InputOperations
     /// <param name="virtualKeys">The virtual keys to send</param>
     /// <param name="millisecondDelay">The delay between press and release</param>
     /// <returns>The number of inputs successfully sent, refer to <seealso cref="SendInput(uint, INPUT[], int)"/> for extra details about this number</returns>
-    public static uint SendKeypress( VirtualKeyShort[] virtualKeys, uint millisecondDelay = 0 )
+    public static uint SendKeypress( VirtualKey[] virtualKeys, uint millisecondDelay = 0 )
     {
         // The array of inputs that need to be created from the virtualKeys array
         INPUT[] inputs = new INPUT[ virtualKeys.Length ];
@@ -598,7 +601,7 @@ public class InputOperations
         /// <summary>
         /// An enum of shorts of all possible keys that can be sent
         /// </summary>
-        internal VirtualKeyShort wVk;
+        internal VirtualKey wVk;
         /// <summary>
         /// An enum of shorts of the different scancodes for certain keys
         /// </summary>
@@ -818,7 +821,7 @@ public class InputOperations
     /// <summary>
     /// An enum of shorts containing every key used for <see cref="KEYBDINPUT.wVk"/>
     /// </summary>
-    public enum VirtualKeyShort : short
+    public enum VirtualKey : short
     {
         /// <summary>
         /// Left mouse button
