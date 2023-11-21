@@ -585,9 +585,9 @@ public static class InputOperations
     [StructLayout( LayoutKind.Sequential )]
     public struct HARDWAREINPUT
     {
-        internal int uMsg;
-        internal short wParamL;
-        internal short wParamR;
+        public int uMsg;
+        public short wParamL;
+        public short wParamR;
     }
     #endregion
 
@@ -601,11 +601,11 @@ public static class InputOperations
         /// <summary>
         /// An enum of shorts of all possible keys that can be sent
         /// </summary>
-        internal VirtualKey wVk;
+        public VirtualKey wVk;
         /// <summary>
         /// An enum of shorts of the different scancodes for certain keys
         /// </summary>
-        internal ScanCode wScan;
+        public ScanCode wScan;
         /// <summary>
         /// Types of keys to input, being:
         /// <list type="bullet">
@@ -615,16 +615,16 @@ public static class InputOperations
         /// <item><see cref="KEYEVENTF.UNICODE"/> for using <see cref="wScan"/> to provide the Unicode character to send (<see cref="wVk"/> must be 0)</item>
         /// </list>
         /// </summary>
-        internal KEYEVENTF dwFlags;
+        public KEYEVENTF dwFlags;
         /// <summary>
         /// Time stamp for the event<br />
         /// If 0, the system provides the time
         /// </summary>
-        internal int time;
+        public int time;
         /// <summary>
         /// Additional info, required to use <see cref="GetMessageExtraInfo"/> for it
         /// </summary>
-        internal UIntPtr dwExtraInfo;
+        public UIntPtr dwExtraInfo;
     }
 
     /// <summary>
@@ -1428,11 +1428,11 @@ public static class InputOperations
         /// <summary>
         /// The absolute position of the mouse, or the amount of motion since the last mouse event was generated, depending on the value of the dwFlags member. Absolute data is specified as the x coordinate of the mouse; relative data is specified as the number of pixels moved.
         /// </summary>
-        internal int dx;
+        public int dx;
         /// <summary>
         /// The absolute position of the mouse, or the amount of motion since the last mouse event was generated, depending on the value of the dwFlags member. Absolute data is specified as the y coordinate of the mouse; relative data is specified as the number of pixels moved.
         /// </summary>
-        internal int dy;
+        public int dy;
         /// <summary>
         /// <see cref="dwFlags"/> specific data, such as:
         /// <list type="bullet">
@@ -1442,7 +1442,7 @@ public static class InputOperations
         /// </list>
         /// Should be 0 if none of the above are used
         /// </summary>
-        internal int mouseData;
+        public int mouseData;
         /// <summary>
         /// Flags for what event to do, being:
         /// <list type="bullet">
@@ -1462,16 +1462,16 @@ public static class InputOperations
         /// <item><see cref="MOUSEEVENTF.ABSOLUTE"/> for normalizing <see cref="dx"/> and <see cref="dy"/> to contain absolute coordinates, where it'd normally be relative coordinates without this set</item>
         /// </list>
         /// </summary>
-        internal MOUSEEVENTF dwFlags;
+        public MOUSEEVENTF dwFlags;
         /// <summary>
         /// Time stamp for the event<br />
         /// If 0, the system provides the time
         /// </summary>
-        internal uint time;
+        public uint time;
         /// <summary>
         /// Additional info, required to use <see cref="GetMessageExtraInfo"/> for it
         /// </summary>
-        internal UIntPtr dwExtraInfo;
+        public UIntPtr dwExtraInfo;
     }
 
     /// <summary>
