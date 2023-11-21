@@ -323,6 +323,72 @@ public class InputOperations
     private static extern IntPtr GetMessageExtraInfo();
 
     /// <summary>
+    /// Gets data from the clipboard
+    /// </summary>
+    /// <param name="uFormat">The clipboard format, see <see cref="ClipboardFormat"/> for standard formats</param>
+    /// <returns>A pointer to the data, use <see cref="Marshal.PtrToStringUni(nint)"/> when converting to <see cref="string"/></returns>
+    [DllImport( "user32.dll" )]
+    private static extern IntPtr GetClipboardData( uint uFormat );
+
+    /// <summary>
+    /// Opens the clipboard for viewing and prevents modification from other applications
+    /// </summary>
+    /// <param name="hWndNewOwner">A handle to the window to be associated with the open clipboard, use 0 to associate with the current task</param>
+    /// <returns>A boolean for success or failure</returns>
+    [DllImport( "user32.dll" )]
+    private static extern bool OpenClipboard( IntPtr hWndNewOwner );
+
+    /// <summary>
+    /// Closes the clipboard, reallowing modification by other clients
+    /// </summary>
+    /// <returns>A boolean for success or failure</returns>
+    [DllImport( "user32.dll" )]
+    private static extern bool CloseClipboard();
+
+    /// <summary>
+    /// Locks a global memory object
+    /// </summary>
+    /// <param name="hMem">A handle to the global memory object, obtained using GlobalAlloc or GlobalReAlloc</param>
+    /// <returns>A pointer to the first byte of the memory block, or a pointer to 0 for failure</returns>
+    [DllImport( "kernel32.dll" )]
+    private static extern IntPtr GlobalLock( IntPtr hMem );
+
+    /// <summary>
+    /// Unlocks a global memory object
+    /// </summary>
+    /// <param name="hMem">A handle to the global memory object</param>
+    /// <returns>A boolean for whether the global memory object is still locked or not</returns>
+    [DllImport( "kernel32.dll" )]
+    private static extern bool GlobalUnlock( IntPtr hMem );
+
+    /// <summary>
+    /// Gets data from the clipboard, converting between <see cref="ClipboardFormat"/> and <see cref="uint"/> so no casting is needed
+    /// </summary>
+    /// <param name="format">The <see cref="ClipboardFormat"/> to obtain data as</param>
+    /// <returns>A pointer to the clipboard data, use <see cref="Marshal.PtrToStringUni(nint)"/> when converting to <see cref="string"/></returns>
+    private static IntPtr GetClipboardData( ClipboardFormat format ) => GetClipboardData( ( uint )format );
+
+    /// <summary>
+    /// Gets <see cref="string"/> data from the clipboard
+    /// </summary>
+    /// <returns>A string containing the last data in the clipboard</returns>
+    public static string GetClipboardText()
+    {
+        if ( !OpenClipboard( 0 ) )
+            return string.Empty;
+
+        IntPtr hData = GetClipboardData( ClipboardFormat.UNICODETEXT );
+        CloseClipboard();
+
+        if ( hData == IntPtr.Zero )
+            return string.Empty;
+
+        string? pszText = Marshal.PtrToStringUni( hData );
+
+        return pszText ?? string.Empty;
+    }
+
+    /// <summary>
     /// Sends input events
     /// </summary>
     /// <param name="inputs">An array of inputs to send</param>
@@ -339,6 +405,36 @@ public class InputOperations
         }
 
         return SendInput( ( uint )inputs.Length, inputs, INPUT.Size );
+    }
+
+    public static uint SendUnicode( char c, uint millisecondDelay = 0 ) => SendUnicode( new[] { c }, millisecondDelay );
+    public static uint SendUnicode( char[] chars, uint millisecondDelay = 0 )
+    {
+        INPUT[] inputs = new INPUT[ chars.Length ];
+
+        for ( int i = 0; i < chars.Length; i++ )
+        {
+            inputs[ i ].type = InputType.INPUT_KEYBOARD;
+            inputs[ i ].U.ki.wVk = 0;
+            inputs[ i ].U.ki.wScan = ( ScanCodeShort )chars[ i ];
+            inputs[ i ].U.ki.dwFlags = KEYEVENTF.UNICODE;
+            inputs[ i ].U.ki.time = 0;
+        }
+
+        InputEvent( inputs );
+
+        Task delay = Task.CompletedTask;
+        if ( millisecondDelay > 0 )
+            delay = Task.Delay( ( int )millisecondDelay );
+
+        for ( int i = 0; i < inputs.Length; i++ )
+        {
+            inputs[ i ].U.ki.dwFlags = KEYEVENTF.KEYUP;
+        }
+
+        delay.Wait();
+
+        return InputEvent( inputs );
     }
 
     /// <summary>
@@ -392,6 +488,36 @@ public class InputOperations
     }
 
     #region Input Data
+    public enum ClipboardFormat : uint
+    {
+        BITMAP = 2,
+        DIB = 8,
+        DIBVS = 17,
+        DIF = 5,
+        DSPBITMAP = 0x82,
+        DSPENHMETAFILE = 0x8e,
+        DSPMETAFILEPICT = 0x83,
+        DSPTEXT = 0x81,
+        ENHMETAFILE = 14,
+        GDIOBJFIRST = 0x300,
+        GDIOBJLAST = 0x3ff,
+        HDROP = 15,
+        LOCALE = 16,
+        METAFILEPICT = 3,
+        OEMTEXT = 7,
+        OWNERDISPLAY = 0x80,
+        PALETTE = 9,
+        PENDATA = 10,
+        PRIVATEFIRST = 0x200,
+        PRIVATELAST = 0x2ff,
+        RIFF = 11,
+        SYLK = 4,
+        TEXT = 1,
+        TIFF = 6,
+        UNICODETEXT = 13,
+        WAVE = 12
+    }
+
     /// <summary>
     /// A struct for handling INPUT data, structured in this way specifically so Windows doesn't freak out or do something unexpected
     /// </summary>
@@ -1370,3 +1496,5 @@ public class InputOperations
     #endregion
 }
 #endregion
+
+
