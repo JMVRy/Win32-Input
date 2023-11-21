@@ -323,6 +323,10 @@ public static class InputOperations
     /// <returns>A pointer containing the extra information, which is device specific</returns>
     [DllImport( "user32.dll", SetLastError = true )]
     private static extern IntPtr GetMessageExtraInfo();
+    /// <summary>
+    /// Gets extra info about the input, kinda required by SendInput
+    /// </summary>
+    /// <returns>A pointer containing the extra information, which is device specific</returns>
     public static IntPtr GetExtraInfo() => GetMessageExtraInfo();
 
     /// <summary>
